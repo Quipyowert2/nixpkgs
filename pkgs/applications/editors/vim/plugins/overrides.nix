@@ -3298,6 +3298,15 @@ assertNoAdditions {
     };
   });
 
+  taghelper-vim = super.taghelper-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      description = "Vim plugin that shows the current function/tag in the statusline";
+      homepage = "https://github.com/mgedmin/taghelper.vim";
+      license = lib.licenses.mit;
+      platforms = lib.platforms.all;
+    };
+  });
+
   tardis-nvim = super.tardis-nvim.overrideAttrs (old: {
     dependencies = [ self.plenary-nvim ];
     meta = old.meta // {

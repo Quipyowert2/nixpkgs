@@ -14528,6 +14528,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  taghelper-vim = buildVimPlugin {
+    pname = "taghelper.vim";
+    version = "2025-01-20";
+    src = fetchFromGitHub {
+      owner = "mgedmin";
+      repo = "taghelper.vim";
+      rev = "a96ff14898f959a2d77b9b53db4c30cdcd248377";
+      sha256 = "0n8b08aw08a8xr0y5fgpp2c9sici5y0nj23dxkm5xkmcqzshcrh9";
+    };
+    meta.homepage = "https://github.com/mgedmin/taghelper.vim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   taglist-vim = buildVimPlugin {
     pname = "taglist.vim";
     version = "2010-10-18";
