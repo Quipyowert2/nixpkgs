@@ -7124,6 +7124,7 @@ with pkgs;
   nvtopPackages = recurseIntoAttrs (import ../tools/system/nvtop { inherit callPackage stdenv; });
 
   inherit (callPackages ../development/libraries/ogre { })
+    ogre_11
     ogre_13
     ogre_14
     ;

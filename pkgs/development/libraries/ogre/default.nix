@@ -41,7 +41,7 @@ let
       imguiHash,
     }:
     let
-      imgui.src = fetchFromGitHub {
+      imgui.src = if imguiVersion == "UNUSED" then "UNUSED" else fetchFromGitHub {
         owner = "ocornut";
         repo = "imgui";
         rev = "v${imguiVersion}";
@@ -59,11 +59,14 @@ let
         inherit hash;
       };
 
-      postPatch = ''
-        mkdir -p build
-        cp -R ${imgui.src} build/imgui-${imguiVersion}
-        chmod -R u+w build/imgui-${imguiVersion}
-      '';
+      postPatch =
+        if imguiVersion == "UNUSED" then
+          "mkdir -p build"
+        else ''
+          mkdir -p build
+          cp -R ${imgui.src} build/imgui-${imguiVersion}
+          chmod -R u+w build/imgui-${imguiVersion}
+        '';
 
       nativeBuildInputs = [
         cmake
@@ -105,6 +108,9 @@ let
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         (lib.cmakeBool "OGRE_BUILD_LIBS_AS_FRAMEWORKS" false)
+      ]
+      ++ lib.optionals (imguiVersion == "UNUSED") [
+        (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
       ];
 
       meta = {
@@ -134,5 +140,12 @@ in
     # https://github.com/OGRECave/ogre/blob/v13.6.5/Components/Overlay/CMakeLists.txt
     imguiVersion = "1.87";
     imguiHash = "sha256-H5rqXZFw+2PfVMsYvAK+K+pxxI8HnUC0GlPhooWgEYM=";
+  };
+
+  ogre_11 = common {
+    version = "1.11.5";
+    hash = "sha256-KhkYpdg/Ahb+hwufqg5LgeTFUo5Z7vOP9UdwK1BpSIs=";
+    imguiVersion = "UNUSED";
+    imguiHash = "";
   };
 }
