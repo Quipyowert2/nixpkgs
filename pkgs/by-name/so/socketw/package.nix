@@ -34,8 +34,9 @@ stdenv.mkDerivation rec {
   '';
 
   preConfigure = ''
-    mkdir -p /build/src/build/_cmcm-modules/resolved
-    cp ${joinpaths} /build/src/build/_cmcm-modules/resolved/JoinPaths.cmake
+    mkdir -p build/_cmcm-modules/resolved
+    cp ${joinpaths} build/_cmcm-modules/resolved/JoinPaths.cmake
+    echo -n 'https://AnotherFoxGuy.com/CMakeCM::modules/JoinPaths.cmake.1' > build/_cmcm-modules/resolved/JoinPaths.cmake.whence
   '';
 
   nativeBuildInputs = [
