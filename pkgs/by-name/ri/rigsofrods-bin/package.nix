@@ -20,7 +20,8 @@
   fmt,
   rapidjson,
   angelscript,
-  openal
+  openal,
+  socketw
 }:
 
 stdenv.mkDerivation rec {
@@ -65,6 +66,7 @@ stdenv.mkDerivation rec {
     (angelscript.overrideAttrs (oldAttrs: {
       NIX_CFLAGS_COMPILE = (oldAttrs.NIX_CFLAGS_COMPILE or "") + " -DAS_DEPRECATED";
     }))
+    socketw
   ];
 
   cmakeFlags = [
