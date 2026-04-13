@@ -17,11 +17,13 @@
   alsa-lib,
   ogre_11,
   mygui,
-  fmt,
+fmt,
   rapidjson,
   angelscript,
   openal,
-  socketw
+  socketw,
+  curl,
+  dos2unix
 }:
 
 stdenv.mkDerivation rec {
@@ -33,10 +35,20 @@ stdenv.mkDerivation rec {
     hash = "sha256-4ZGsh42QXYmMgrw2EO6BGpvGPbdviDor8pS3TqN2fIE=";
   };
 
-  # Fix OIS include dir not being found.
-  patchPhase = ''
-     sed -i 's/PATH_SUFFIXES OIS/PATH_SUFFIXES ois/' cmake/find-modules/FindOIS.cmake
+  prePatch = ''
+    dos2unix cmake/find-modules/FindOIS.cmake
+    dos2unix source/main/gui/DashBoardManager.cpp
+    dos2unix source/main/gui/GUIUtils.cpp
+    dos2unix source/main/gui/RTTLayer.cpp
+    dos2unix source/main/gui/panels/GUI_RepositorySelector.cpp
+    dos2unix source/main/gui/panels/GUI_GameSettings.cpp
+    dos2unix source/main/gui/panels/GUI_MainSelector.cpp
+    dos2unix source/main/gui/panels/GUI_MultiplayerSelector.cpp
+    dos2unix source/main/gui/panels/GUI_TopMenubar.cpp
+    dos2unix source/main/gui/panels/GUI_GameControls.cpp
   '';
+
+  patches = [ ./fix-strings.patch ./format-security.patch ];
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -46,6 +58,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    dos2unix
     libGL
     ogre_11
     ois
@@ -67,6 +80,7 @@ stdenv.mkDerivation rec {
       NIX_CFLAGS_COMPILE = (oldAttrs.NIX_CFLAGS_COMPILE or "") + " -DAS_DEPRECATED";
     }))
     socketw
+    curl
   ];
 
   cmakeFlags = [

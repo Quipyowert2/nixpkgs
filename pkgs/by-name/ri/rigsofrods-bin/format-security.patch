@@ -1,0 +1,395 @@
+diff --git a/source/main/gui/panels/GUI_GameControls.cpp b/source/main/gui/panels/GUI_GameControls.cpp
+index 7a2e8e5f6..09f50f652 100644
+--- a/source/main/gui/panels/GUI_GameControls.cpp
++++ b/source/main/gui/panels/GUI_GameControls.cpp
+@@ -68,7 +68,7 @@ void GameControls::Draw()
+             ImGui::TextColored(GRAY_HINT_TEXT, "%s", App::GetInputEngine()->eventIDToDescription(m_active_event).c_str());
+             // Keys preview
+             ImGui::NewLine();
+-            ImGui::Text(keys_pressed.c_str());
++            ImGui::Text("%s", keys_pressed.c_str());
+             // EXPL checkbox + tooltip
+             ImGui::NewLine();
+             ImGui::Checkbox(_LC("GameControls", "EXPL"), &m_interactive_keybinding_expl);
+diff --git a/source/main/gui/panels/GUI_RepositorySelector.cpp b/source/main/gui/panels/GUI_RepositorySelector.cpp
+index 4e2fc443b..ae9a446bf 100644
+--- a/source/main/gui/panels/GUI_RepositorySelector.cpp
++++ b/source/main/gui/panels/GUI_RepositorySelector.cpp
+@@ -1344,13 +1344,13 @@ void RepositorySelector::DrawResourceViewRightColumn()
+     ImGui::TextColored(theme.value_blue_text_color, "%d", selected_item.view_count);
+ 
+     // Right side, next line
+-    ImGui::TextDisabled(_LC("RepositorySelector", "Date Added:"));
++    ImGui::TextDisabled("%s", _LC("RepositorySelector", "Date Added:"));
+     ImGui::SameLine();
+     time_t a = (const time_t)selected_item.resource_date;
+     ImGui::TextColored(theme.value_blue_text_color, "%s", asctime(gmtime(&a)));
+ 
+     // Right side, next line
+-    ImGui::TextDisabled(_LC("RepositorySelector", "Last Update:"));
++    ImGui::TextDisabled("%s", _LC("RepositorySelector", "Last Update:"));
+     ImGui::SameLine();
+     time_t b = (const time_t)selected_item.last_update;
+     ImGui::TextColored(theme.value_blue_text_color, "%s", asctime(gmtime(&b)));
+diff --git a/source/main/gui/panels/GUI_TopMenubar.cpp b/source/main/gui/panels/GUI_TopMenubar.cpp
+index 79771554c..a43b3face 100644
+--- a/source/main/gui/panels/GUI_TopMenubar.cpp
++++ b/source/main/gui/panels/GUI_TopMenubar.cpp
+@@ -822,7 +822,7 @@ void TopMenubar::Draw(float dt)
+ 
+             ImGui::PushItemWidth(125.f); // Width includes [+/-] buttons
+             ImGui::Separator();
+-            ImGui::TextColored(GRAY_HINT_TEXT, _LC("TopMenubar", "Visual options:"));
++            ImGui::TextColored(GRAY_HINT_TEXT, "%s", _LC("TopMenubar", "Visual options:"));
+             DrawGIntSlider(App::gfx_polygon_mode, _LC("TopMenubar", "Polygon mode"), 1, 3);
+             if (ImGui::IsItemHovered())
+             {
+@@ -1414,7 +1414,7 @@ void TopMenubar::Draw(float dt)
+                         {
+                             ImGui::BeginTooltip();
+                             std::string w = "x:" + std::to_string(ai_waypoints[i].position.x) + " y:" + std::to_string(ai_waypoints[i].position.y) + " z:" + std::to_string(ai_waypoints[i].position.z);
+-                            ImGui::Text(w.c_str());
++                            ImGui::Text("%s", w.c_str());
+                             ImGui::EndTooltip();
+                         }
+                         ImGui::SameLine();
+@@ -1428,10 +1428,10 @@ void TopMenubar::Draw(float dt)
+                         if (ImGui::IsItemHovered())
+                         {
+                             ImGui::BeginTooltip();
+-                            ImGui::Text(_LC("TopMenubar", "Set waypoint speed in km/h for land vehicles"));
++                            ImGui::Text("%s", _LC("TopMenubar", "Set waypoint speed in km/h for land vehicles"));
+                             ImGui::Separator();
+-                            ImGui::Text(_LC("TopMenubar", "Value -1: Ignore, vehicle will use default speed"));
+-                            ImGui::Text(_LC("TopMenubar", "Value >= 5: Override default speed"));
++                            ImGui::Text("%s", _LC("TopMenubar", "Value -1: Ignore, vehicle will use default speed"));
++                            ImGui::Text("%s", _LC("TopMenubar", "Value >= 5: Override default speed"));
+                             ImGui::EndTooltip();
+                         }
+                         ImGui::PopID();
+@@ -1470,7 +1470,7 @@ void TopMenubar::Draw(float dt)
+                 TuneupDefPtr& tuneup_def = tuning_actor->getWorkingTuneupDef();
+ 
+                 // SAVED TUNEUPS
+-                ImGui::TextDisabled(fmt::format(_LC("Tuning", "Saved tuneups ({})"), tuning_saves.cqy_results.size()).c_str());
++                ImGui::TextDisabled("%s", fmt::format("%s", _LC("Tuning", "Saved tuneups ({})"), tuning_saves.cqy_results.size()).c_str());
+                 for (CacheQueryResult& tuneup_result: tuning_saves.cqy_results)
+                 {
+                     ImGui::PushID(tuneup_result.cqr_entry->fname.c_str());
+@@ -1516,7 +1516,7 @@ void TopMenubar::Draw(float dt)
+                 // WORKING TUNEUP
+                 ImGui::Separator();
+                 ImGui::AlignTextToFramePadding();
+-                ImGui::TextDisabled(_LC("Tuning", "Working tuneup"));
++                ImGui::TextDisabled("%s", _LC("Tuning", "Working tuneup"));
+                 if (tuning_savebox_visible)
+                 {
+                     ImGui::InputText(_LC("Tuning", "Name"), tuning_savebox_buf.GetBuffer(), tuning_savebox_buf.GetCapacity());
+@@ -2009,9 +2009,9 @@ void TopMenubar::Draw(float dt)
+                             ImGui::SameLine();
+                             switch (vcam.vcam_role)
+                             {
+-                            case VCAM_ROLE_MIRROR_PROP_LEFT: ImGui::TextDisabled(_LC("Tuning", "(Mirror prop - Left)")); break;
+-                            case VCAM_ROLE_MIRROR_PROP_RIGHT: ImGui::TextDisabled(_LC("Tuning", "(Mirror prop - Right)")); break;
+-                            default: ImGui::TextDisabled(_LC("Tuning", "(Videocamera)")); break;
++                            case VCAM_ROLE_MIRROR_PROP_LEFT: ImGui::TextDisabled("%s", _LC("Tuning", "(Mirror prop - Left)")); break;
++                            case VCAM_ROLE_MIRROR_PROP_RIGHT: ImGui::TextDisabled("%s", _LC("Tuning", "(Mirror prop - Right)")); break;
++                            default: ImGui::TextDisabled("%s", _LC("Tuning", "(Videocamera)")); break;
+                             }
+                         }
+ 
+@@ -2249,12 +2249,12 @@ void TopMenubar::DrawActorListSinglePlayer()
+ 
+ void DrawRepairBoxEvent(events ev, std::string const& desc)
+ {
+-    ImDrawEventHighlighted(ev); ImGui::SameLine(); ImGui::TextDisabled(desc.c_str()); ImGui::NextColumn();
++    ImDrawEventHighlighted(ev); ImGui::SameLine(); ImGui::TextDisabled("%s", desc.c_str()); ImGui::NextColumn();
+ }
+ 
+ void DrawRepairBoxModkey(OIS::KeyCode modkey, std::string const& desc)
+ {
+-    ImDrawModifierKeyHighlighted(modkey); ImGui::SameLine(); ImGui::TextDisabled(desc.c_str()); ImGui::NextColumn();
++    ImDrawModifierKeyHighlighted(modkey); ImGui::SameLine(); ImGui::TextDisabled("%s", desc.c_str()); ImGui::NextColumn();
+ }
+ 
+ void TopMenubar::DrawSpecialStateBox(float top_offset)
+@@ -2421,7 +2421,7 @@ void TopMenubar::DrawSpecialStateBox(float top_offset)
+             else if (m_state_box == StateBox::STATEBOX_RACE)
+             {
+                 ImGui::SameLine();
+-                ImGui::Text(special_text_b.c_str());
++                ImGui::Text("%s", special_text_b.c_str());
+                 ImGui::SetCursorPosX((ImGui::GetWindowSize().x / 2) - (ImGui::CalcTextSize(special_text_c.c_str()).x / 2));
+                 ImGui::TextColored(special_color_c,"%s", special_text_c.c_str());
+ 
+@@ -2431,7 +2431,7 @@ void TopMenubar::DrawSpecialStateBox(float top_offset)
+ 
+                 if (!special_text_d.empty())
+                 {
+-                    ImGui::TextDisabled(text);
++                    ImGui::TextDisabled("%s", text.ToCStr());
+                 }
+             }
+             else if (m_state_box == StateBox::STATEBOX_LIVE_REPAIR || m_state_box == StateBox::STATEBOX_QUICK_REPAIR)
+diff --git a/source/main/gui/GUIUtils.cpp b/source/main/gui/GUIUtils.cpp
+index adcee0dfa..2add4bed7 100644
+--- a/source/main/gui/GUIUtils.cpp
++++ b/source/main/gui/GUIUtils.cpp
+@@ -541,7 +541,7 @@ bool RoR::ImButtonHoldToConfirm(const std::string& btn_idstr, const bool smallbu
+ 
+         ImGui::BeginTooltip();
+         std::string text = _L("Hold to confirm");
+-        ImGui::TextDisabled(text.c_str());
++        ImGui::TextDisabled("%s", text.c_str());
+         ImGui::ProgressBar(active_time_left/time_limit, ImVec2(ImGui::CalcTextSize(text.c_str()).x, 8.f), "");
+         ImGui::EndTooltip();
+     }
+@@ -596,7 +596,7 @@ void RoR::ImDummyHyperlink(std::string caption)
+     const ImVec4 LINKCOLOR = ImVec4(0.3, 0.5, 0.9, 1.0);
+     ImGui::PushStyleColor(0, LINKCOLOR);  //Text
+     ImVec2 cursorBefore = ImGui::GetCursorScreenPos();
+-    ImGui::Text(caption.c_str());
++    ImGui::Text("%s", caption.c_str());
+     ImVec2 textSize = ImGui::CalcTextSize(caption.c_str());
+     ImGui::GetWindowDrawList()->AddLine(
+         cursorBefore + ImVec2(0, textSize.y), cursorBefore + textSize,  //from-to
+diff --git a/source/main/gui/panels/GUI_GameSettings.cpp b/source/main/gui/panels/GUI_GameSettings.cpp
+index aedf2ed29..92572a344 100644
+--- a/source/main/gui/panels/GUI_GameSettings.cpp
++++ b/source/main/gui/panels/GUI_GameSettings.cpp
+@@ -134,7 +134,7 @@ void GameSettings::DrawRenderSystemSettings()
+         ImGui::SetCursorPos(box_pos);
+         ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0.8f, 0.7f, 0.1f, 1.f));
+         ImGui::BeginChildFrame(ImGuiID(123), box_size);
+-        ImGui::TextColored(ImVec4(0.1f, 0.1f, 0.1f, 1.f), text.c_str());
++        ImGui::TextColored(ImVec4(0.1f, 0.1f, 0.1f, 1.f), "%s", text.c_str());
+         ImGui::EndChildFrame();
+         ImGui::PopStyleColor(); // FrameBg
+     }
+diff --git a/source/main/gui/panels/GUI_MainSelector.cpp b/source/main/gui/panels/GUI_MainSelector.cpp
+index fe2f2b756..e5d5b521e 100644
+--- a/source/main/gui/panels/GUI_MainSelector.cpp
++++ b/source/main/gui/panels/GUI_MainSelector.cpp
+@@ -167,7 +167,7 @@ void MainSelector::Draw()
+     // advanced search hint
+     const char* searchbox_hint = "(?)";
+     ImGui::SetCursorPos(searchbox_cursor + ImVec2(searchbox_width - (ImGui::CalcTextSize(searchbox_hint).x + ImGui::GetStyle().FramePadding.x), ImGui::GetStyle().FramePadding.y));
+-    ImGui::TextDisabled(searchbox_hint);
++    ImGui::TextDisabled("%s", searchbox_hint);
+     if (ImGui::IsItemHovered())
+     {
+         ImGui::BeginTooltip();
+diff --git a/source/main/gui/panels/GUI_MultiplayerSelector.cpp b/source/main/gui/panels/GUI_MultiplayerSelector.cpp
+index d7effd992..cf6d6cd1e 100644
+--- a/source/main/gui/panels/GUI_MultiplayerSelector.cpp
++++ b/source/main/gui/panels/GUI_MultiplayerSelector.cpp
+@@ -211,7 +211,7 @@ void MultiplayerSelector::DrawSettingsTab()
+     DrawGTextEdit(App::mp_player_token,       _LC("MultiplayerSelector", "User token"), m_user_token_buf);
+     ImGui::SameLine();
+     ImHyperlink("https://forum.rigsofrods.org/account/user-token", _LC("MultiplayerSelector", "(Get token online)"));
+-    ImGui::TextDisabled(_LC("MultiplayerSelector", "Never share your user token, even if someone is claiming to be an administrator."));
++    ImGui::TextDisabled("%s", _LC("MultiplayerSelector", "Never share your user token, even if someone is claiming to be an administrator."));
+     ImGui::PopItemWidth();
+ 
+     ImGui::PopID();
+
+diff --git a/source/main/gui/panels/GUI_NodeBeamUtils.cpp b/source/main/gui/panels/GUI_NodeBeamUtils.cpp
+index 6cfdfc45a..00c3a6964 100644
+--- a/source/main/gui/panels/GUI_NodeBeamUtils.cpp
++++ b/source/main/gui/panels/GUI_NodeBeamUtils.cpp
+@@ -92,7 +92,7 @@ void NodeBeamUtils::DrawSpringDampTab(ActorPtr actor)
+ {
+     ImGui::PushItemWidth(500.f); // Width includes [+/-] buttons
+ 
+-    ImGui::TextColored(GRAY_HINT_TEXT, _LC("NodeBeamUtils", "Beams:"));
++    ImGui::TextColored(GRAY_HINT_TEXT, "%s", _LC("NodeBeamUtils", "Beams:"));
+     if (ImGui::SliderFloat("Spring##Beams", &actor->ar_nb_beams_scale.first, 0.1f, 10.0f, "%.5f"))
+     {
+         actor->applyNodeBeamScales();
+@@ -102,7 +102,7 @@ void NodeBeamUtils::DrawSpringDampTab(ActorPtr actor)
+         actor->applyNodeBeamScales();
+     }
+     ImGui::Separator();
+-    ImGui::TextColored(GRAY_HINT_TEXT, _LC("NodeBeamUtils", "Shocks:"));
++    ImGui::TextColored(GRAY_HINT_TEXT, "%s", _LC("NodeBeamUtils", "Shocks:"));
+     if (ImGui::SliderFloat("Spring##Shocks", &actor->ar_nb_shocks_scale.first, 0.1f, 10.0f, "%.5f"))
+     {
+         actor->applyNodeBeamScales();
+@@ -113,7 +113,7 @@ void NodeBeamUtils::DrawSpringDampTab(ActorPtr actor)
+     }
+     ImGui::Separator();
+ 
+-    ImGui::TextColored(GRAY_HINT_TEXT, _LC("NodeBeamUtils", "Wheels:"));
++    ImGui::TextColored(GRAY_HINT_TEXT, "%s", _LC("NodeBeamUtils", "Wheels:"));
+     const float WBASE_WIDTH = 125.f;
+     const float WSCALE_WIDTH = 225.f;
+     const float WLABEL_GAP = 20.f;
+@@ -264,7 +264,7 @@ void NodeBeamUtils::DrawCreateProjectBanner(ActorPtr actor, bool& window_open)
+     ImVec2 rect_max = cursor + PAD + ImVec2(ImGui::GetWindowContentRegionMax().x, ImGui::GetTextLineHeightWithSpacing());
+     ImGui::GetWindowDrawList()->AddRectFilled(rect_min, rect_max, ImColor(theme.tip_panel_bg_color));
+     ImGui::AlignTextToFramePadding();
+-    ImGui::Text(_LC("NodeBeamUtils", "This mod is read only (ZIP archive)"));
++    ImGui::Text("%s", _LC("NodeBeamUtils", "This mod is read only (ZIP archive)"));
+     ImGui::SameLine();
+     if (ImGui::Button(_LC("NodeBeamUtils", "Create writable project (if not existing)")))
+     {
+@@ -296,7 +296,7 @@ void NodeBeamUtils::DrawMenubar(ActorPtr actor)
+ {
+     if (ImGui::BeginMenuBar())
+     {
+-        ImGui::TextDisabled(_LC("NodeBeamUtils", "Project:"));
++        ImGui::TextDisabled("%s", _LC("NodeBeamUtils", "Project:"));
+         ImGui::SameLine();
+         ImGui::Text("%s", actor->getUsedActorEntry()->dname.c_str());
+         ImGui::SameLine();
+@@ -315,7 +315,7 @@ void NodeBeamUtils::DrawMenubar(ActorPtr actor)
+ void NodeBeamUtils::DrawMassTab(ActorPtr actor)
+ {
+     ImGui::PushID("drymass"); // To disambiguate the 'reset' buttons.
+-    ImGui::TextDisabled(_LC("NodeBeamUtils", "User-defined values:"));
++    ImGui::TextDisabled("%s", _LC("NodeBeamUtils", "User-defined values:"));
+     if (ImGui::SliderFloat(_LC("NodeBeamUtils", "Dry mass"), &actor->ar_dry_mass,
+         actor->ar_original_dry_mass * 0.4f, actor->ar_original_dry_mass * 1.6f, "%.2f Kg"))
+     {
+@@ -365,7 +365,7 @@ void NodeBeamUtils::DrawMassTab(ActorPtr actor)
+     ImGui::PopID();
+ 
+     ImGui::Separator();
+-    ImGui::TextDisabled(_LC("NodeBeamUtils", "Calculated values:"));
++    ImGui::TextDisabled("%s", _LC("NodeBeamUtils", "Calculated values:"));
+     ImGui::Text("%s: %f", _LC("NodeBeamUtils", "Total mass"), actor->ar_total_mass);
+     ImGui::Text("%s: %d", _LC("NodeBeamUtils", "Total nodes"), actor->ar_num_nodes);
+     ImGui::Text("%s: %d", _LC("NodeBeamUtils", "Loaded nodes"), actor->ar_masscount);
+diff --git a/source/main/gui/panels/GUI_ScriptMonitor.cpp b/source/main/gui/panels/GUI_ScriptMonitor.cpp
+index c39ee9009..7539a510d 100644
+--- a/source/main/gui/panels/GUI_ScriptMonitor.cpp
++++ b/source/main/gui/panels/GUI_ScriptMonitor.cpp
+@@ -38,11 +38,11 @@ void ScriptMonitor::Draw()
+     ImGui::SetColumnWidth(2, 200);
+ 
+     // Header
+-    ImGui::TextDisabled(_LC("ScriptMonitor", "ID"));
++    ImGui::TextDisabled("%s", _LC("ScriptMonitor", "ID"));
+     ImGui::NextColumn();
+-    ImGui::TextDisabled(_LC("ScriptMonitor", "File name"));
++    ImGui::TextDisabled("%s", _LC("ScriptMonitor", "File name"));
+     ImGui::NextColumn();
+-    ImGui::TextDisabled(_LC("ScriptMonitor", "Options"));
++    ImGui::TextDisabled("%s", _LC("ScriptMonitor", "Options"));
+     
+     this->DrawCommentedSeparator(_LC("ScriptMonitor", "Active"));
+ 
+diff --git a/source/main/gui/panels/GUI_SimPerfStats.cpp b/source/main/gui/panels/GUI_SimPerfStats.cpp
+index 7b9ca8c29..cebbde205 100644
+--- a/source/main/gui/panels/GUI_SimPerfStats.cpp
++++ b/source/main/gui/panels/GUI_SimPerfStats.cpp
+@@ -48,7 +48,7 @@ void SimPerfStats::Draw()
+ 
+     std::string title = fmt::format("FPS: {:5.1f}, Batch: {:5}, Tri: {:6}", stats.lastFPS, stats.batchCount, stats.triangleCount);
+     ImGui::SetCursorPosX((ImGui::GetWindowSize().x - ImGui::CalcTextSize(title.c_str()).x) * 0.5f);
+-    ImGui::Text(title.c_str());
++    ImGui::Text("%s", title.c_str());
+ 
+     ImGui::Separator();
+ 
+@@ -88,4 +88,4 @@ std::string SimPerfStats::Convert(const float f)
+     std::stringstream s;
+     s << std::fixed << std::setprecision(2) << f;
+     return s.str();
+-}
+\ No newline at end of file
++}
+diff --git a/source/main/gui/panels/GUI_SurveyMap.cpp b/source/main/gui/panels/GUI_SurveyMap.cpp
+index aaf85acf7..424dcf813 100644
+--- a/source/main/gui/panels/GUI_SurveyMap.cpp
++++ b/source/main/gui/panels/GUI_SurveyMap.cpp
+@@ -388,7 +388,7 @@ void SurveyMap::Draw()
+     {
+         text = "Drag to adjust this waypoint";
+     }
+-    ImGui::Text(text);
++    ImGui::Text("%s", text);
+ 
+     ImGui::SameLine();
+     ImGui::SetCursorPosY(orig_y);
+@@ -397,7 +397,7 @@ void SurveyMap::Draw()
+     ImGui::SetCursorPosY(ImGui::GetCursorPosY() + ImGui::GetStyle().ItemSpacing.y);
+ 
+     text = "Set AI waypoint";
+-    ImGui::Text(text);
++    ImGui::Text("%s", text);
+ 
+     ImGui::SameLine();
+     ImGui::SetCursorPosY(orig_y);
+@@ -410,7 +410,7 @@ void SurveyMap::Draw()
+     {
+         text = "Remove this waypoint";
+     }
+-    ImGui::Text(text);
++    ImGui::Text("%s", text);
+ 
+     ImGui::SameLine();
+     ImGui::SetCursorPosY(orig_y);
+@@ -419,7 +419,7 @@ void SurveyMap::Draw()
+     ImGui::SetCursorPosY(ImGui::GetCursorPosY() + ImGui::GetStyle().ItemSpacing.y);
+ 
+     text = "Zoom mini map";
+-    ImGui::Text(text);
++    ImGui::Text("%s", text);
+ 
+     mWindowMouseHovered = ImGui::IsWindowHovered(ImGuiHoveredFlags_RootAndChildWindows);
+ 
+diff --git a/source/main/gui/panels/GUI_VehicleInfoTPanel.cpp b/source/main/gui/panels/GUI_VehicleInfoTPanel.cpp
+index df4d41e90..17dd41ad4 100644
+--- a/source/main/gui/panels/GUI_VehicleInfoTPanel.cpp
++++ b/source/main/gui/panels/GUI_VehicleInfoTPanel.cpp
+@@ -1239,7 +1239,7 @@ void VehicleInfoTPanel::DrawCustomLightButtons(RoR::GfxActor* actorx)
+     const char* hotkey = "CTRL+[1...]";
+     ImVec2 keysize = ImGui::CalcTextSize(hotkey);
+     ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x) - keysize.x - ImGui::GetStyle().ItemSpacing.x);
+-    ImGui::Text(hotkey);
++    ImGui::Text("%s", hotkey);
+ 
+     const ImVec2 BTN_PADDING = ImVec2(1, 1);
+     const ImVec2 btn_size = ImGui::CalcTextSize("10") + (BTN_PADDING * 2);
+diff --git a/source/main/scripting/bindings/ImGuiAngelscript.cpp b/source/main/scripting/bindings/ImGuiAngelscript.cpp
+index 275fa250d..595297a11 100644
+--- a/source/main/scripting/bindings/ImGuiAngelscript.cpp
++++ b/source/main/scripting/bindings/ImGuiAngelscript.cpp
+@@ -328,21 +328,21 @@ void RoR::RegisterImGuiBindings(AngelScript::asIScriptEngine* engine)
+ 
+     // Widgets: Text
+     engine->RegisterGlobalFunction("void Text(const string&in)", asFUNCTIONPR([](const string& n) {
+-        ImGui::Text(n.c_str());
++        ImGui::Text("%s", n.c_str());
+     }, (const string&), void), asCALL_CDECL);
+     engine->RegisterGlobalFunction("void TextDisabled(const string&in)", asFUNCTIONPR([](const string& n) {
+-        ImGui::TextDisabled(n.c_str());
++        ImGui::TextDisabled("%s", n.c_str());
+     }, (const string&), void), asCALL_CDECL);
+     engine->RegisterGlobalFunction("void TextColored(color col, const string&in)", asFUNCTIONPR([](ColourValue c, const string& n) {
+-        ImGui::TextColored(ImVec4(c.r, c.g, c.b, c.a), n.c_str());
++        ImGui::TextColored(ImVec4(c.r, c.g, c.b, c.a), "%s", n.c_str());
+     }, (ColourValue, const string&), void), asCALL_CDECL);
+     engine->RegisterGlobalFunction("void TextWrapped(const string&in)", asFUNCTIONPR([](const string& n) {
+-        ImGui::TextWrapped(n.c_str()); }, (const string&), void), asCALL_CDECL);
++        ImGui::TextWrapped("%s", n.c_str()); }, (const string&), void), asCALL_CDECL);
+     engine->RegisterGlobalFunction("void LabelText(const string&in, const string&in)", asFUNCTIONPR([](const string& l, const string& n) { 
+-        ImGui::LabelText(l.c_str(), n.c_str()); }, (const string&, const string&), void), asCALL_CDECL);
++        ImGui::LabelText(l.c_str(), "%s", n.c_str()); }, (const string&, const string&), void), asCALL_CDECL);
+     engine->RegisterGlobalFunction("void Bullet()", asFUNCTIONPR(ImGui::Bullet, (), void), asCALL_CDECL);
+     engine->RegisterGlobalFunction("void BulletText(const string&in)", asFUNCTIONPR([](const string& n) { 
+-        ImGui::BulletText(n.c_str()); }, (const string&), void), asCALL_CDECL);
++        ImGui::BulletText("%s", n.c_str()); }, (const string&), void), asCALL_CDECL);
+ 
+     // Widgets: Main
+     engine->RegisterGlobalFunction("bool Button(const string&in, vector2 = vector2(0,0))", asFUNCTIONPR([](const string& n, Vector2 v) {
+@@ -525,7 +525,7 @@ void RoR::RegisterImGuiBindings(AngelScript::asIScriptEngine* engine)
+     // Tooltips
+     engine->RegisterGlobalFunction("void BeginTooltip()", asFUNCTIONPR(ImGui::BeginTooltip  , (), void), asCALL_CDECL);
+     engine->RegisterGlobalFunction("void EndTooltip()", asFUNCTIONPR(ImGui::EndTooltip      , (), void), asCALL_CDECL);
+-    engine->RegisterGlobalFunction("void SetTooltip(const string&in)", asFUNCTIONPR([](const string& t) { ImGui::SetTooltip(t.c_str()); }, (const string&), void), asCALL_CDECL);
++    engine->RegisterGlobalFunction("void SetTooltip(const string&in)", asFUNCTIONPR([](const string& t) { ImGui::SetTooltip("%s", t.c_str()); }, (const string&), void), asCALL_CDECL);
+ 
+     // Menus
+     engine->RegisterGlobalFunction("bool BeginMainMenuBar()", asFUNCTIONPR([]() {  return ImGui::BeginMainMenuBar();  }, (), bool), asCALL_CDECL);
