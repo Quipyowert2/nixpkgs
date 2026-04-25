@@ -36,6 +36,15 @@ stdenv.mkDerivation {
     libvorbis
   ];
 
+  installPhase = ''
+    mkdir $out/
+    cp soulfu $out/
+    chmod +x $out/
+    cp datafile.sdf $out/
+    cp Manual.htm $out/
+    cp packaging/license.txt $out/
+  '';
+
   meta = {
     description = "A 3D action role-playing hack and slash dungeon crawler made by Aaron Bishop, the creator of Egoboo";
     homepage = "https://aaronbishopgames.com";
