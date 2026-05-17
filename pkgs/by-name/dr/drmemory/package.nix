@@ -3,6 +3,8 @@
   fetchFromGitHub,
   cmake,
   dynamorio,
+  buildDocs ? false,
+  doxygen ? null,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,25 +19,31 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  outputs = [ "out" ] ++ lib.optional buildDocs "doc";
+
   nativeBuildInputs = [
     cmake
-  ];
+  ]
+  ++ lib.optionals buildDocs [ doxygen ];
 
   buildInputs = [
     dynamorio
   ];
 
-  postPatch = ''
-    substituteInPlace tests/clone.c --replace 'typedef int bool;' ""
-    sed -i '49,52d' tests/fuzz/fuzz_buffer.c
-  '';
-
   cmakeFlags = [
-    "-DBUILD_DOCS=OFF"
-    "-DRUN_IN_BACKGROUND=OFF"
+    "-DBUILD_DOCS=${if buildDocs then "ON" else "OFF"}"
     "-DDynamoRIO_DIR=${dynamorio}/cmake"
-#    "-DCMAKE_CXX_STANDARD=20" # Using C++23 gives errors about typedefing bool and using false as a enum value
+    "-DCMAKE_C_STANDARD=17" # Using C23 gives errors about defining bool
   ];
+
+  postInstall = lib.optionalString buildDocs ''
+    mkdir -p $doc/share/doc
+    mkdir -p $doc/share/doc_embed
+    mv $out/drmemory/docs/* $doc/share/drmemory/doc/
+    mv $out/drmemory/docs_embed/* $doc/share/drmemory/doc_embed/
+    rmdir $out/drmemory/docs
+    rmdir $out/drmemory/docs_embed
+  '';
 
   meta = {
     description = "Memory Debugger for Windows, Linux, Mac, and Android";
