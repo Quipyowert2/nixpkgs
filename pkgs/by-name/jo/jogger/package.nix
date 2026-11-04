@@ -13,26 +13,28 @@
   desktop-file-utils,
   libadwaita,
   libshumate,
+  libsoup_3,
   alsa-lib,
   espeak,
   sqlite,
   glib-networking,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jogger";
-  version = "1.2.5";
+  version = "2.2.0";
 
   src = fetchFromCodeberg {
     owner = "baarkerlounger";
     repo = "jogger";
     tag = finalAttrs.version;
-    hash = "sha256-bju9XXMT6HRHG9QViO+FQCYQ+llrC+GP/AlIha0mxkM=";
+    hash = "sha256-75gwp8jyfQfL1cJLfD6SZmZPBIaXkIQKrPt4UIvRDf4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-k4nUtFdwCWa8flSkOEQe7UqorpYPCGrcXHTvVOqoAQI=";
+    hash = "sha256-8PuhJ8fM0BowMg5VceXzIqMsS6WYPY0HtM0NY3QaUqI=";
   };
 
   nativeBuildInputs = [
@@ -51,11 +53,14 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libadwaita
     libshumate
+    libsoup_3
     alsa-lib
     espeak
     sqlite
     glib-networking
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "App for Gnome Mobile to Track running and other workouts";
